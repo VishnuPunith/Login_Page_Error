@@ -258,6 +258,7 @@ button[type="submit"] {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    text-align: center;
 }
 
 .button1:hover,.button2:hover{
