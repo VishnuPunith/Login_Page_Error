@@ -15,71 +15,75 @@
         <div class="patch">
         <div class="login">
       <img src="../src/assets/03.png" class="imglay">
-      <form @submit.prevent="submitSignupForm">
-        <div class="form-group">
-          <label for="firstname"></label>
-          <input type="firstname" id="firstname" placeholder="Enter the name" v-model="firstname" required />
-        </div>
-        <div class="form-group">
-        <label for="email"></label>
-        <input type="email" id="email" placeholder="Enter Email" v-model="email"/>
-      </div>
-      <div class="form-group">
-        <label for="password"></label>
-        <input type="password" id="password" placeholder="Type here Password" v-model="password" required />
-      </div>
-      <div class="form-group">
-        <label for="passwordConfirm"></label>
-        <input type="password" id="passwordConfirm" placeholder="Confirm Your Password" v-model="passwordConfirm" required/>
-      </div>
-      <div class="form-group">
-        <label for="phonenumber"></label>
-        <input type="text" id="phonenumber" placeholder="Enter your Contact Number" maxlength="10" v-model="phonenumber" required/>
-      </div>
-      <label>
-      <input type="checkbox" v-model="isChecked" />
-       I Agree and conditions
-    </label>
-      <button type="submit">Sign Up</button>
-    </form>
+      <form @submit.prevent="submitForm">
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" id="email" v-model="email" />
+      <small v-if="errors.email">{{ errors.email }}</small>
+    </div>
+    <div>
+    <label for="password">Password:</label>
+    <div class="password-input">
+      <input type="password" id="password" v-model="password" :class="{ 'show-password': showPassword }" />
+      <span class="password-toggle" @click="togglePasswordVisibility">
+        <i class="fa" :class="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+      </span>
     </div>
   </div>
-      </div>
+    <button type="submit">Sign Up</button>
+  </form>
+  </div>
+  </div>
+  </div>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      isChecked: false,
-      firstname:"",
-      email: "",
-      password: "",
-      passwordConfirm: "",
-      phonenumber:"",
-      loggedIn: false,
-      signedUp: false,
-      users: []
+      email: '',
+      password: '',
+      errors: {
+        email: '',
+        password: '',
+        showPassword: false,
+      },
     };
   },
-  
   methods: {
-    submitSignupForm() {
-      if (this.email && this.password && this.password === this.passwordConfirm) {
-        // Save the user's data to a "database" (in this case, a local variable)
-        this.users.push({ email: this.email, password: this.password });
-        alert("Signup successful! Please log in.");
-        this.signedUp = true;
-        this.email = "";
-        this.password = "";
-        this.passwordConfirm = "";
-      } else {
-        alert("Please enter valid credentials and matching passwords.");
+    submitForm() {
+      this.errors = {}; // Clear previous errors
+
+      if (!this.email) {
+        this.errors.email = 'Email is required';
+      } else if (!this.isValidEmail(this.email)) {
+        this.errors.email = 'Email is not valid';
+      }
+
+      if (!this.password) {
+        this.errors.password = 'Password is required';
+      } else if (this.password.length < 6) {
+        this.errors.password = 'Password must be at least 6 characters';
+      }
+      if (Object.keys(this.errors).length === 0) {
+        // Perform signup logic or submit the form
+        alert('Login successful');
+        // Reset form fields
+        this.email = '';
+        this.password = '';
       }
     },
+    togglePasswordVisibility() {
+      this.showPassword = !this.showPassword;
     },
-  }
-    </script>
+    isValidEmail(email) {
+      // Implement your email validation logic here
+      const re = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
+      return re.test(email);
+    },
+  },
+};
+</script>
 
 <style scoped>
 .signup-container {
@@ -123,15 +127,17 @@ input[type="passwordConfirm"]
 }
 
 button[type="submit"] {
-  width: 90%;
-  padding: 10px;
-  background-color: blue;
-  color: white;
-  border: none;
-  border-radius: 19px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
+  width: 85%;
+    padding: 10px;
+    background-color: blue;
+    color: white;
+    border: none;
+    border-radius: 19px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 11px;
+    margin-left: 36px;
+    cursor: pointer;
 }
 
 .form-control {
