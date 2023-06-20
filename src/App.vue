@@ -19,18 +19,16 @@
     <div>
       <label for="email">Email:</label>
       <input type="email" id="email" v-model="email" />
-      <small v-if="errors.email">{{ errors.email }}</small>
+      <small v-if="errors.email" class="err1">{{ errors.email }}</small>
     </div>
     <div>
     <label for="password">Password:</label>
     <div class="password-input">
-      <input type="password" id="password" v-model="password" :class="{ 'show-password': showPassword }" />
-      <span class="password-toggle" @click="togglePasswordVisibility">
-        <i class="fa" :class="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
-      </span>
+      <input type="password" id="password" v-model="password"/>
+      <small v-if="errors.password" class="err2">{{ errors.password }}</small>
     </div>
   </div>
-    <button type="submit">Sign Up</button>
+    <button type="submit">Login</button>
   </form>
   </div>
   </div>
@@ -62,9 +60,10 @@ export default {
 
       if (!this.password) {
         this.errors.password = 'Password is required';
-      } else if (this.password.length < 6) {
+      } 
+      else if (this.password.length < 6) {
         this.errors.password = 'Password must be at least 6 characters';
-      }
+      }     
       if (Object.keys(this.errors).length === 0) {
         // Perform signup logic or submit the form
         alert('Login successful');
@@ -72,9 +71,6 @@ export default {
         this.email = '';
         this.password = '';
       }
-    },
-    togglePasswordVisibility() {
-      this.showPassword = !this.showPassword;
     },
     isValidEmail(email) {
       // Implement your email validation logic here
@@ -92,7 +88,9 @@ export default {
   align-items: center;
   height: 100vh;
 }
-
+.err1{
+  color:red;
+}
 form {
   width: 400px;
   padding: 75px;
@@ -100,7 +98,9 @@ form {
   border-radius: 4px;
   margin-top: -1rem;
 }
-
+.err2{
+  color:red
+}
 .form-group {
   margin-bottom: 20px;
   border-radius: 3rem;
